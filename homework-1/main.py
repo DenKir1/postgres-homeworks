@@ -34,7 +34,7 @@ def insert_bd(my_table: str, data: list):
 
 
 def insert_customers():
-    """ SQL запрос на ввод данных в customers из-за "BONAP","Bon app'"..."""
+    """ SQL запрос на ввод данных в customers из-за "BONAP","Bon app'",..."""
     conn = psycopg2.connect(host="localhost", database="north",
                             user="postgres", password="12345")
 
@@ -44,15 +44,14 @@ def insert_customers():
                 with open(path_customers, newline='', encoding="utf-8") as csvfile:
                     reader = csv.DictReader(csvfile)
                     for line in reader:
-                        cus_id = line["customers_id"]
-                        comp_name = line["company_name"]
-                        cont_name = line["contact_name"]
+                        cus_id = line['customer_id']
+                        comp_name = line['company_name']
+                        cont_name = line['contact_name']
                         cur.execute('INSERT INTO customers VALUES (%s, %s, %s)', (cus_id, comp_name, cont_name))
 
             print("Execution done")
     finally:
         conn.close()
-
 
 
 path_orders = "north_data/orders_data.csv"
@@ -63,7 +62,7 @@ orders = from_csv(path_orders)
 customers = from_csv(path_customers)
 employees = from_csv(path_employees)
 
-#insert_bd("employees", employees)
+insert_bd("employees", employees)
 #insert_bd("customers", customers)
 insert_customers()
 insert_bd("orders", orders)
