@@ -18,7 +18,7 @@ def insert_bd(my_table: str, data: list):
     """ SQL запрос на ввод данных"""
     conn = psycopg2.connect(host="localhost", database="north",
                             user="postgres", password="12345")
-    data_sql = ", ".join(data)
+    data_sql = ", ".join(map(str, data))
     text_to_sql = f"INSERT INTO {my_table} VALUES {data_sql}"
     try:
         with conn:
@@ -28,11 +28,43 @@ def insert_bd(my_table: str, data: list):
                 # rows = cur.fetchall()
                 # for row in rows:
                 #    print(row)
+            print("Execution done")
     finally:
         conn.close()
 
 
-path1 = "north_data/orders_data.csv"
-path2 = "north_data/customers_data.csv"
-path3 = "north_data/employees_data.csv"
-print(from_csv(path1))
+def insert_customers():
+    """ SQL запрос на ввод данных в customers из-за "BONAP","Bon app'"..."""
+    conn = psycopg2.connect(host="localhost", database="north",
+                            user="postgres", password="12345")
+
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                with open(path_customers, newline='', encoding="utf-8") as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    for line in reader:
+                        cus_id = line["customers_id"]
+                        comp_name = line["company_name"]
+                        cont_name = line["contact_name"]
+                        cur.execute('INSERT INTO customers VALUES (%s, %s, %s)', (cus_id, comp_name, cont_name))
+
+            print("Execution done")
+    finally:
+        conn.close()
+
+
+
+path_orders = "north_data/orders_data.csv"
+path_customers = "north_data/customers_data.csv"
+path_employees = "north_data/employees_data.csv"
+
+orders = from_csv(path_orders)
+customers = from_csv(path_customers)
+employees = from_csv(path_employees)
+
+#insert_bd("employees", employees)
+#insert_bd("customers", customers)
+insert_customers()
+insert_bd("orders", orders)
+

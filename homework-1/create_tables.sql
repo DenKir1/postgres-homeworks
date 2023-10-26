@@ -5,19 +5,19 @@ CREATE TABLE employees
   last_name varchar(100) NOT NULL,
   title varchar(100),
   birth_date date,
-  notes text,
+  notes text
 );
 CREATE TABLE customers
 (
-  customer_id int PRIMARY KEY,
+  customer_id varchar(100) PRIMARY KEY NOT NULL,
   company_name varchar(100) NOT NULL,
-  contract_name varchar(100) NOT NULL,
+  contact_name varchar(100) NOT NULL
 );
 CREATE TABLE orders
 (
   order_id int PRIMARY KEY,
-  customer_id int  REFERENCES customers(customer_id),
+  customer_id varchar(100)  REFERENCES customers(customer_id),
   employee_id int  REFERENCES employees(employee_id),
   order_date date,
-  ship_city varchar(100),
+  ship_city varchar(100)
 );
